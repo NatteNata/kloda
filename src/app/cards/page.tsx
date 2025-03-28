@@ -1,9 +1,6 @@
+import type { CardsResponse } from '@/api/cards/cards.types'
 import { Cards } from '@/components/cards/cards'
 import { Container } from '@/components/containers/container'
-import {
-  CARDS_DEFAULT_PARAMS,
-  type CardsSearchParams,
-} from '@/components/pageControls'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -11,13 +8,20 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  searchParams?: CardsSearchParams
+  searchParams?: URLSearchParams
 }
 
-export default function CardsPage({ searchParams }: Props) {
+export default async function CardsPage({ searchParams }: Props) {
+  const query = searchParams ? new URLSearchParams(searchParams).toString() : ''
+  const data = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}v1/cards?${query}`,
+    {},
+  )
+  const cards: CardsResponse = await data.json()
+
   return (
     <Container>
-      <Cards {...CARDS_DEFAULT_PARAMS} {...searchParams} />
+      <Cards initialData={cards} />
     </Container>
   )
 }

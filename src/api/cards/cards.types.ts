@@ -38,12 +38,12 @@ export type EditCardArgs = {
 
 export type CardsArgs = {
   search: string
-  page: string
-  limit: string
+  page: number
+  limit: number
   order: string
   sort: string
   categories: string[]
-  userId?: string
+  userId?: number
   action?: string
 }
 

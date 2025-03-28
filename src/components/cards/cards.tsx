@@ -1,29 +1,28 @@
 'use client'
 
-import type { CardModel } from '@/api/cards/cards.types'
+import type { CardModel, CardsResponse } from '@/api/cards/cards.types'
 import { Card } from '@/components/cards/card'
 import { Columns, type ColumnsCount } from '@/components/containers/columns'
 import { ErrorMessage } from '@/components/errorMessage'
 import { Loader } from '@/components/loader'
-import { PageControls } from '@/components/pageControls'
+import { type CardsSearchParams, PageControls } from '@/components/pageControls'
 import { TextToSpeech } from '@/components/textToSpeech'
 import { useGetCards } from '@/hooks/useCards'
+import { normalizeCardsSearchParams } from '@/utils/normalizeSearchParams'
+import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
 type Props = {
-  search: string
-  page: string
-  limit: string
-  order: string
-  sort: string
-  categories: string | string[]
-  userId: string
-  action: string
+  initialData: CardsResponse
 }
 
 // ToDo: Refactor all search params to lower case
-export const Cards = ({ categories, ...restProps }: Props) => {
-  const categoriesToArray = categories
+export const Cards = ({ initialData }: Props) => {
+  const searchParams = Object.fromEntries(useSearchParams().entries())
+
+  const params = normalizeCardsSearchParams(searchParams as CardsSearchParams)
+
+  /*  const categoriesToArray = categories
     ? Array.isArray(categories)
       ? categories
       : [categories]
@@ -31,12 +30,9 @@ export const Cards = ({ categories, ...restProps }: Props) => {
 
   const normalizedCategories = categoriesToArray.map(category =>
     category.toLowerCase(),
-  )
+  )*/
 
-  const { isPending, isError, data, error } = useGetCards({
-    categories: normalizedCategories,
-    ...restProps,
-  })
+  const { isPending, isError, data, error } = useGetCards(params, initialData)
 
   const [cardToSpeech, setCardToSpeech] = useState<CardModel>()
   const [isCardPlaying, setIsCardPlaying] = useState(false)
@@ -56,9 +52,9 @@ export const Cards = ({ categories, ...restProps }: Props) => {
     return <ErrorMessage isCentered>Cards not found 🙈</ErrorMessage>
   }
 
-  const pages = `${restProps.page ?? '1'}/${restData.totalPages}`
-  const playlistName = restProps.search
-    ? `Search: ${restProps.search} (page ${pages})`
+  const pages = `${params.page ?? '1'}/${restData.totalPages}`
+  const playlistName = params.search
+    ? `Search: ${params.search} (page ${pages})`
     : `Page ${pages}`
 
   return (
