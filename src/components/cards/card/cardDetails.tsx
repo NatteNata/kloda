@@ -1,6 +1,6 @@
 'use client'
 
-import type { CardModel } from '@/api/cards/cards.types'
+import type { CardModel, CardResponse } from '@/api/cards/cards.types'
 import { Card } from '@/components/cards/card/card'
 import { ErrorMessage } from '@/components/errorMessage'
 import { Loader } from '@/components/loader'
@@ -11,14 +11,18 @@ import { useState } from 'react'
 
 type Props = {
   cardId: string
+  initialData: CardResponse
 }
 
-export const CardDetails = ({ cardId }: Props) => {
+export const CardDetails = ({ cardId, initialData }: Props) => {
   const categories = useSearchParams().getAll('categories')
-  const { isPending, isError, error, data } = useGetCard({
-    id: cardId,
-    categories,
-  })
+  const { isPending, isError, error, data } = useGetCard(
+    {
+      id: cardId,
+      categories,
+    },
+    initialData,
+  )
   const [cardToSpeech, setCardToSpeech] = useState<CardModel>()
 
   if (isPending) {

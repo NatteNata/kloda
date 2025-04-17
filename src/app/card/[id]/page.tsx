@@ -1,3 +1,4 @@
+import { fetchCard } from '@/api/ssr/card'
 import { CardDetails } from '@/components/cards/card/cardDetails'
 import { Container } from '@/components/containers/container'
 import { CardPageControls } from '@/components/pageControls'
@@ -10,11 +11,18 @@ export const generateMetadata = ({
   title: `Card #${cardId}`,
 })
 
-export default function CardPage({ params: { id: cardId } }: ParamsIdProps) {
+type Props = {
+  params: {
+    id: string
+  }
+}
+export default async function CardPage({ params: { id } }: Props) {
+  const serverData = await fetchCard(id)
+
   return (
     <Container isCentered className='flex-col justify-start'>
       <CardPageControls />
-      <CardDetails cardId={cardId} />
+      <CardDetails initialData={serverData} cardId={id} />
     </Container>
   )
 }

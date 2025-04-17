@@ -1,13 +1,18 @@
 'use client'
 
-import type { CardModel, CardsResponse } from '@/api/cards/cards.types'
+import type {
+  CardModel,
+  CardsArgs,
+  CardsResponse,
+} from '@/api/cards/cards.types'
 import { Card } from '@/components/cards/card'
 import { Columns, type ColumnsCount } from '@/components/containers/columns'
 import { ErrorMessage } from '@/components/errorMessage'
 import { Loader } from '@/components/loader'
-import { type CardsSearchParams, PageControls } from '@/components/pageControls'
+import { PageControls } from '@/components/pageControls'
 import { TextToSpeech } from '@/components/textToSpeech'
 import { useGetCards } from '@/hooks/useCards'
+import type { URLCardsSearchParams } from '@/types/searchParams'
 import { normalizeCardsSearchParams } from '@/utils/normalizeSearchParams'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -16,23 +21,17 @@ type Props = {
   initialData: CardsResponse
 }
 
-// ToDo: Refactor all search params to lower case
 export const Cards = ({ initialData }: Props) => {
   const searchParams = Object.fromEntries(useSearchParams().entries())
 
-  const params = normalizeCardsSearchParams(searchParams as CardsSearchParams)
+  const cardsSearchParams: CardsArgs = normalizeCardsSearchParams(
+    searchParams as URLCardsSearchParams,
+  )
 
-  /*  const categoriesToArray = categories
-    ? Array.isArray(categories)
-      ? categories
-      : [categories]
-    : []
-
-  const normalizedCategories = categoriesToArray.map(category =>
-    category.toLowerCase(),
-  )*/
-
-  const { isPending, isError, data, error } = useGetCards(params, initialData)
+  const { data, isPending, isError, error } = useGetCards(
+    cardsSearchParams,
+    initialData,
+  )
 
   const [cardToSpeech, setCardToSpeech] = useState<CardModel>()
   const [isCardPlaying, setIsCardPlaying] = useState(false)
@@ -46,21 +45,21 @@ export const Cards = ({ initialData }: Props) => {
     return <ErrorMessage isError>{error.message}</ErrorMessage>
   }
 
-  const { cards, ...restData } = data
+  const { cards, ...totals } = data
 
   if (!cards.length) {
     return <ErrorMessage isCentered>Cards not found 🙈</ErrorMessage>
   }
 
-  const pages = `${params.page ?? '1'}/${restData.totalPages}`
-  const playlistName = params.search
-    ? `Search: ${params.search} (page ${pages})`
+  const pages = `${cardsSearchParams.page ?? '1'}/${totals.totalPages}`
+  const playlistName = cardsSearchParams.search
+    ? `Search: ${cardsSearchParams.search} (page ${pages})`
     : `Page ${pages}`
 
   return (
     <>
       <PageControls
-        {...restData}
+        {...totals}
         currentItems={cards.length}
         columnsCount={columnsCount}
         setColumnsCount={setColumnsCount}

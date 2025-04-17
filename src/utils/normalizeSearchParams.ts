@@ -13,7 +13,7 @@ export const CARDS_DEFAULT_PARAMS: CardsArgs = {
   sort: 'createdAt',
   categories: [],
   userId: undefined,
-  action: '',
+  action: undefined,
 } as const
 
 export function normalizeCardsSearchParams(
@@ -36,11 +36,11 @@ export function normalizeCardsSearchParams(
     search: search ? search.toLowerCase() : CARDS_DEFAULT_PARAMS.search,
     page: page ? Number(page) : CARDS_DEFAULT_PARAMS.page,
     limit: limit ? Number(limit) : CARDS_DEFAULT_PARAMS.limit,
-    order: order ?? CARDS_DEFAULT_PARAMS.order,
+    order: order ? order.toLowerCase() : CARDS_DEFAULT_PARAMS.order,
     sort: sort ?? CARDS_DEFAULT_PARAMS.sort,
     categories: categoriesToLowerCase ?? CARDS_DEFAULT_PARAMS.categories,
     userId: userId ? Number(userId) : CARDS_DEFAULT_PARAMS.userId,
-    // action: action ? action.toLowerCase() : CARDS_DEFAULT_PARAMS.action,
+    action: action ? action.toLowerCase() : CARDS_DEFAULT_PARAMS.action,
   }
 }
 
@@ -61,7 +61,7 @@ export function normalizeUsersSearchParams(
     search: search ? search.toLowerCase() : USERS_DEFAULT_PARAMS.search,
     page: page ? Number(page) : USERS_DEFAULT_PARAMS.page,
     limit: limit ? Number(limit) : USERS_DEFAULT_PARAMS.limit,
-    order: order ?? USERS_DEFAULT_PARAMS.order,
+    order: order ? order.toLowerCase() : USERS_DEFAULT_PARAMS.order,
     sort: sort ?? USERS_DEFAULT_PARAMS.sort,
   }
 }

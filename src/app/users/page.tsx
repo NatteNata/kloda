@@ -1,9 +1,7 @@
+import { fetchUsers } from '@/api/ssr/users'
 import { Container } from '@/components/containers/container'
-import {
-  USERS_DEFAULT_PARAMS,
-  type UsersSearchParams,
-} from '@/components/pageControls'
 import { Users } from '@/components/users/users'
+import type { URLUsersSearchParams } from '@/types/searchParams'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -11,13 +9,15 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  searchParams?: UsersSearchParams
+  searchParams?: URLUsersSearchParams
 }
 
-export default function UsersPage({ searchParams }: Props) {
+export default async function UsersPage({ searchParams }: Props) {
+  const serverData = await fetchUsers(searchParams)
+
   return (
     <Container>
-      <Users {...USERS_DEFAULT_PARAMS} {...searchParams} />
+      <Users initialData={serverData} />
     </Container>
   )
 }

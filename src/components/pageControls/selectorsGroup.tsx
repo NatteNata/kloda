@@ -39,7 +39,7 @@ type Props = {
   currentItems: number
   sort: string
   order: string
-  limit: string
+  limit: number
   onChangeParams: (key: Key, value: string) => void
 }
 
@@ -58,7 +58,7 @@ export const SelectorsGroup = ({
       {itemsName === 'Cards' && <CategoriesSelect />}
       <Select
         label={`${itemsName} per page`}
-        selectedKeys={[limit]}
+        selectedKeys={[String(limit)]}
         onChange={({ target: { value } }) => onChangeParams('limit', value)}
         isDisabled={lowNumberItems}
       >

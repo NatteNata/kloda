@@ -13,9 +13,9 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
   console.error('Error message:', error.message)
   return (
     <Container>
-      <div className='text-danger text-xl'>Error fetching Cards data</div>
+      <div className='text-danger text-xl'>Error fetching Users data</div>
       <div>{error.message}</div>
-      <Button variant={'primary'} onClick={reset} className={'my-5'}>
+      <Button variant={'primary'} onClick={reset}>
         Try again
       </Button>
     </Container>

@@ -10,48 +10,18 @@ import {
   SelectorsGroup,
 } from '@/components/pageControls'
 import { usePaths } from '@/hooks/usePaths'
+import type {
+  URLCardsSearchParams,
+  URLUsersSearchParams,
+} from '@/types/searchParams'
+import {
+  normalizeCardsSearchParams,
+  normalizeUsersSearchParams,
+} from '@/utils/normalizeSearchParams'
 import { setFirstPage } from '@/utils/setFirstPage'
 import { useTransitionRouter } from 'next-view-transitions'
 import { useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
-
-export const USERS_DEFAULT_PARAMS: UsersSearchParams = {
-  search: '',
-  page: '1',
-  limit: '10',
-  order: 'desc',
-  sort: 'registeredAt',
-} as const
-
-export const CARDS_DEFAULT_PARAMS: CardsSearchParams = {
-  search: '',
-  page: '1',
-  limit: '10',
-  order: 'desc',
-  sort: 'createdAt',
-  categories: [],
-  userId: '',
-  action: '',
-} as const
-
-export type UsersSearchParams = {
-  search: string
-  page: string
-  limit: string
-  order: string
-  sort: string
-}
-
-export type CardsSearchParams = {
-  search: string
-  page: string
-  limit: string
-  order: string
-  sort: string
-  categories: string | string[]
-  userId: string
-  action: string
-}
 
 type Props = {
   totalPages: number
@@ -70,17 +40,17 @@ export const PageControls = ({
   columnsCount,
   setColumnsCount,
 }: Props) => {
-  const { pathname, isUsersPath, isCardsPath } = usePaths()
+  const searchParams = Object.fromEntries(useSearchParams().entries())
   const { replace } = useTransitionRouter()
-  const searchParams = useSearchParams()
-  const currentParams = {
-    ...(isUsersPath ? USERS_DEFAULT_PARAMS : CARDS_DEFAULT_PARAMS),
-    ...Object.fromEntries(searchParams.entries()),
-  }
-  const { page, search, ...restParams } = currentParams
+  const { pathname, isUsersPath, isCardsPath } = usePaths()
+  const currentSearchParams = isCardsPath
+    ? normalizeCardsSearchParams(searchParams as URLCardsSearchParams)
+    : normalizeUsersSearchParams(searchParams as URLUsersSearchParams)
+  const { page, search, ...restParams } = currentSearchParams
   const hasSearchParams = searchParams.toString() !== ''
   const itemsName = isUsersPath ? 'Users' : isCardsPath ? 'Cards' : 'Items'
   const onReset = () => replace(pathname)
+
   const onChangeParams = useCallback(
     (key: Key, value: string) => {
       const params = new URLSearchParams(searchParams)
@@ -97,7 +67,7 @@ export const PageControls = ({
     <div className='flex flex-col items-center justify-around gap-x-3'>
       <div className='flex items-center justify-start gap-x-3'>
         <Pagination
-          page={page}
+          page={Number(page)}
           totalPages={totalPages}
           onChangeParams={onChangeParams}
         />

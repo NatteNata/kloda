@@ -15,6 +15,7 @@ import {
 import type {
   CardArgs,
   CardModel,
+  CardResponse,
   CardsArgs,
   CardsResponse,
   DislikeResponse,
@@ -25,16 +26,20 @@ import type {
 import { getQueryClient } from '@/app/getQueryClient'
 import { type QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 
-export const useGetCards = (args: CardsArgs, inititalData: CardsResponse) =>
+export const useGetCards = (args: CardsArgs, initialData: CardsResponse) =>
   useQuery({
     queryKey: ['cards', ...Object.values(args)],
     queryFn: () => getCards(args),
+    placeholderData: initialData,
+    staleTime: 60 * 1000,
   })
 
-export const useGetCard = (args: CardArgs) =>
+export const useGetCard = (args: CardArgs, initialData?: CardResponse) =>
   useQuery({
     queryKey: ['card', ...Object.values(args)],
     queryFn: () => getCard(args),
+    placeholderData: initialData,
+    staleTime: 60 * 1000,
   })
 
 export const useGetRandomCard = (args: RandomCardArgs) =>

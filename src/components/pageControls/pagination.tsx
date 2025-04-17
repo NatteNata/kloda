@@ -7,7 +7,7 @@ import { useCallback, useEffect } from 'react'
 export type Key = 'page' | 'limit' | 'order' | 'sort'
 
 type Props = {
-  page: string
+  page: number
   totalPages: number
   onChangeParams(key: Key, value: string): void
 }
@@ -33,10 +33,10 @@ export const Pagination = ({ page, totalPages, onChangeParams }: Props) => {
             onChangePage(1, event)
             break
           case 'ArrowLeft':
-            onChangePage(Number(page) - 1, event)
+            onChangePage(page - 1, event)
             break
           case 'ArrowRight':
-            onChangePage(Number(page) + 1, event)
+            onChangePage(page + 1, event)
             break
           case 'End':
             onChangePage(totalPages, event)
@@ -57,7 +57,7 @@ export const Pagination = ({ page, totalPages, onChangeParams }: Props) => {
   return (
     <div className='mx-auto flex w-fit flex-wrap gap-4'>
       <NextUiPagination
-        page={Number(page)}
+        page={page}
         total={totalPages}
         onChange={onChangePage}
         isDisabled={totalPages < 2}

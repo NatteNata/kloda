@@ -10,9 +10,9 @@ export type URLCardsSearchParams = {
 }
 
 export type URLUsersSearchParams = {
-  search: string
-  page: string
-  limit: string
-  order: string
-  sort: string
+  search?: string
+  page?: string
+  limit?: string
+  order?: string
+  sort?: string
 }

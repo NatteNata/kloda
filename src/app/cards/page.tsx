@@ -1,6 +1,7 @@
-import type { CardsResponse } from '@/api/cards/cards.types'
+import { fetchCards } from '@/api/ssr/cards'
 import { Cards } from '@/components/cards/cards'
 import { Container } from '@/components/containers/container'
+import type { URLCardsSearchParams } from '@/types/searchParams'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -8,20 +9,15 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  searchParams?: URLSearchParams
+  searchParams?: URLCardsSearchParams
 }
 
 export default async function CardsPage({ searchParams }: Props) {
-  const query = searchParams ? new URLSearchParams(searchParams).toString() : ''
-  const data = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}v1/cards?${query}`,
-    {},
-  )
-  const cards: CardsResponse = await data.json()
+  const serverData = await fetchCards(searchParams)
 
   return (
     <Container>
-      <Cards initialData={cards} />
+      <Cards initialData={serverData} />
     </Container>
   )
 }
