@@ -31,7 +31,6 @@ export const useGetCards = (args: CardsArgs, initialData: CardsResponse) =>
     queryKey: ['cards', ...Object.values(args)],
     queryFn: () => getCards(args),
     placeholderData: initialData,
-    staleTime: 60 * 1000,
   })
 
 export const useGetCard = (args: CardArgs, initialData?: CardResponse) =>
@@ -39,7 +38,6 @@ export const useGetCard = (args: CardArgs, initialData?: CardResponse) =>
     queryKey: ['card', ...Object.values(args)],
     queryFn: () => getCard(args),
     placeholderData: initialData,
-    staleTime: 60 * 1000,
   })
 
 export const useGetRandomCard = (args: RandomCardArgs) =>

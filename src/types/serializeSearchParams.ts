@@ -5,15 +5,19 @@ export const serializeSearchParams = (searchParams?: URLCardsSearchParams) => {
 
   if (!searchParams) return query
 
-  // biome-ignore lint/complexity/noForEach: <explanation>
-  Object.entries(searchParams).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (value == null) continue
+
     if (Array.isArray(value)) {
-      // biome-ignore lint/complexity/noForEach: <explanation>
-      value.forEach(v => v && query.append(key, String(v)))
-    } else if (value !== undefined && value !== null) {
+      for (const item of value) {
+        if (item != null) {
+          query.append(key, String(item))
+        }
+      }
+    } else {
       query.append(key, String(value))
     }
-  })
+  }
 
   return query
 }

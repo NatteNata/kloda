@@ -1,4 +1,4 @@
-import { fetchUsers } from '@/api/ssr/users'
+import { fetchUsers } from '@/api/ssr/fetch-users'
 import { Container } from '@/components/containers/container'
 import { Users } from '@/components/users/users'
 import type { URLUsersSearchParams } from '@/types/searchParams'

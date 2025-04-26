@@ -1,4 +1,4 @@
-import { fetchCards } from '@/api/ssr/cards'
+import { fetchCards } from '@/api/ssr/fetch-cards'
 import { Cards } from '@/components/cards/cards'
 import { Container } from '@/components/containers/container'
 import type { URLCardsSearchParams } from '@/types/searchParams'

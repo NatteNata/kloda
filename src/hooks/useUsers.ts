@@ -7,7 +7,6 @@ export const useGetUsers = (args: UsersArgs, initialData: UsersResponse) =>
     queryKey: ['users', ...Object.values(args)],
     queryFn: () => getUsers(args),
     placeholderData: initialData,
-    staleTime: 60 * 1000,
   })
 
 export const useGetUser = (id: string) =>

@@ -40,12 +40,14 @@ export const PageControls = ({
   columnsCount,
   setColumnsCount,
 }: Props) => {
-  const searchParams = Object.fromEntries(useSearchParams().entries())
   const { replace } = useTransitionRouter()
   const { pathname, isUsersPath, isCardsPath } = usePaths()
+
+  const searchParams = Object.fromEntries(useSearchParams().entries())
   const currentSearchParams = isCardsPath
     ? normalizeCardsSearchParams(searchParams as URLCardsSearchParams)
     : normalizeUsersSearchParams(searchParams as URLUsersSearchParams)
+
   const { page, search, ...restParams } = currentSearchParams
   const hasSearchParams = searchParams.toString() !== ''
   const itemsName = isUsersPath ? 'Users' : isCardsPath ? 'Cards' : 'Items'

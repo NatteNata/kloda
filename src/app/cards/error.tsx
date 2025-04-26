@@ -9,8 +9,9 @@ type ErrorPageProps = {
 }
 
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
-  console.error('Error digest:', error.digest)
-  console.error('Error message:', error.message)
+  console.error('Server error digest:', error.digest)
+  console.error('Server error message:', error.message)
+
   return (
     <Container>
       <div className='text-danger text-xl'>Error fetching Cards data</div>
