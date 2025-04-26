@@ -103,13 +103,7 @@ export const CardActionBar = ({
             theme={theme}
           />
           <CopyCard theme={theme} content={content} title={title} />
-          <ShareButton
-            url={`${window.location.origin}/card/${cardId}`}
-            shareTitle='Share card link'
-            copyTitle='Copy card link to clipboard'
-            notification='Card link copied to clipboard'
-            theme={theme}
-          />
+          <ShareButton theme={theme} source='card' />
           <PlayCard
             isCardPlaying={isCardPlaying}
             card={card}

@@ -441,13 +441,7 @@ export const TextToSpeech = ({
         {isPlaylistExpanded && (
           <div>
             <Wrapper hasGaps>
-              <ShareButton
-                url={`${window.location.origin}/${window.location.search}`}
-                shareTitle='Share playlist link'
-                copyTitle='Copy playlist link to clipboard'
-                notification='Playlist link copied to clipboard'
-                theme={theme}
-              />
+              <ShareButton theme={theme} source='playlist' />
               <Heading as='h4' className='text-lg'>
                 Playlist <q>{playlistName}</q>
               </Heading>
